@@ -1,0 +1,2 @@
+[console_scripts]
+grap-skill = auto_grap_skill.cli:main
