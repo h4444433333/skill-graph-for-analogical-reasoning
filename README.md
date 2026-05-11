@@ -59,8 +59,10 @@ The repository also includes a source-level example entrypoint for GitHub users:
 
 ### Build A Graph
 
+Use your own directory that contains one or more `SKILL.md` folders:
+
 ```bash
-./.venv/bin/grap-skill build --source ./skills-main --output ./.grap-skill
+./.venv/bin/grap-skill build --source /path/to/your/skills --output ./.grap-skill
 ```
 
 ### Query The Graph
@@ -110,7 +112,7 @@ Notes:
 These commands stay local and do not call an LLM:
 
 ```bash
-./.venv/bin/grap-skill build --source ./skills-main --output ./.grap-skill
+./.venv/bin/grap-skill build --source /path/to/your/skills --output ./.grap-skill
 ./.venv/bin/grap-skill query "edit a docx file with comments" --graph ./.grap-skill/graph.json
 ```
 
@@ -133,7 +135,7 @@ run:
 
 ```bash
 ./.venv/bin/python main.py "I want to edit a docx file with comments" \
-  --skills-source ./skills-main \
+  --skills-source /path/to/your/skills \
   --graph-dir ./.grap-skill
 ```
 
@@ -151,7 +153,7 @@ If you want to verify the retrieval and prompt packaging first:
 
 ```bash
 ./.venv/bin/python main.py "I want to edit a docx file with comments" \
-  --skills-source ./skills-main \
+  --skills-source /path/to/your/skills \
   --graph-dir ./.grap-skill \
   --skip-llm
 ```
@@ -171,7 +173,8 @@ from pathlib import Path
 
 from auto_grap_skill.core import GraphSkillEngine
 
-engine = GraphSkillEngine.build_from_sources([Path("./skills-main").resolve()])
+skills_dir = Path("/path/to/your/skills").resolve()
+engine = GraphSkillEngine.build_from_sources([skills_dir])
 graph_path = engine.save(Path("./.grap-skill").resolve())
 
 result = engine.query("I want to edit a docx file with comments")
@@ -301,10 +304,8 @@ Still early by design:
 ## Repository Layout
 
 - `src/auto_grap_skill/` contains the Python package and CLI
-- `skills/grap-skill/` contains the local skill wrapper
-- `releases/github/` contains a visible GitHub-facing source snapshot
-- `releases/clawhub-skill/` contains the final ClawHub upload bundle
-- `releases/gist/` contains the long-form public markdown version
+- `main.py` contains a source-level example entrypoint for LLM integration
+- `README.md` documents source usage and the published skill entrypoint
 
 ## Python Package And CLI
 
@@ -324,33 +325,14 @@ The module entrypoint also works:
 
 ## ClawHub Version
 
-A code-backed ClawHub skill bundle is prepared in:
-
-- `releases/clawhub-skill/skill-graph-for-analogical-reasoning`
-
-That bundle is not markdown-only.
-It includes:
-
-- `SKILL.md`
-- supporting documentation
-- `scripts/run_grap_skill.py`
-- `python-package/src/auto_grap_skill/`
-
-The ClawHub bundle now carries both the wrapper entrypoint and the packaged Python source used by the project.
-
-The two release forms are meant to stay linked:
-
-- GitHub version: source checkout, editable install, direct Python development
-- ClawHub/OpenClaw version: workspace-installed skill wrapper and packaged bundle
-
-The GitHub README should point skill users to:
+If you want the published skill instead of a source checkout, install it from ClawHub:
 
 ```bash
 openclaw skills install skill-graph-for-analogical-reasoning
 ```
 
-The ClawHub skill bundle should point source-oriented users back to the GitHub
-repository for editable installs and package development.
+Use the GitHub repository for source development and editable installs.
+Use the ClawHub/OpenClaw version when you want the packaged skill workflow.
 
 ## Why The Name
 

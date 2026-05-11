@@ -7,3 +7,6 @@ __pycache__/
 .openclaw-local/
 *.zip
 .DS_Store
+releases/
+skills-main/
+skills/grap-skill/
